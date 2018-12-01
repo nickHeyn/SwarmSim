@@ -7,13 +7,11 @@
 class Camera
 {
 public:
-	glm::vec3 pos, dir, up;
+	glm::vec3 pos, up;
 
 	Camera();
 
 	glm::vec3 getLookAt();
-
-	void updateCamera(float theta);
 
 };
 #endif // !CAMERA_H

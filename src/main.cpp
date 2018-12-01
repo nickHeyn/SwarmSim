@@ -16,11 +16,11 @@
 #endif
 #include "environment.h"
 #include "camera.h"
+#include "constants.h"
 #include <iostream>
 bool fullscreen = false;
 int screenWidth = 800;
 int screenHeight = 600;
-bool DEBUG_ON = true;
 GLuint InitShader(const char* vShaderFileName, const char* fShaderFileName);
 
 
@@ -69,8 +69,7 @@ int main(int argc, char *argv[]) {
 	GLuint shaderProgram = InitShader("src/textured-Vertex.glsl", "src/textured-Fragment.glsl");
 
 	// initilize the environment with the given argument as the scene file
-	int numAgents = atoi(argv[1]);
-	Environment env(numAgents, shaderProgram);
+	Environment env(NUM_AGENTS, shaderProgram);
 
 	float* modelData = env.getModelData(); // Gets all the data of the models
 
@@ -104,6 +103,12 @@ int main(int argc, char *argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 
+	// enable alpha transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glDisable(GL_CULL_FACE);
+
 
 	SDL_Event windowEvent;
 	bool quit = false;
@@ -111,7 +116,7 @@ int main(int argc, char *argv[]) {
 	double time = 0;
 	double prevTime = 0;
 	while (!quit) {
-		time = SDL_GetTicks();
+		time = SDL_GetTicks()/1000.0;
 		float dt = time - prevTime;
 		prevTime = time;
 		glm::vec3 newPos = camera.pos;
@@ -148,7 +153,9 @@ int main(int argc, char *argv[]) {
 		glClearColor(.2f, 0.4f, 0.8f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		env.Draw(&camera, dt, aspect);
+		env.updateAgents(dt);
+
+		env.Draw(&camera, aspect, DEBUG_ON);
 		SDL_GL_SwapWindow(window); //Double buffering
 	}
 	glDeleteProgram(shaderProgram);

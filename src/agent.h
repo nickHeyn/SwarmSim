@@ -14,6 +14,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "camera.h"
+#include "constants.h"
+#include "math.h"
 #include <vector>
 
 class Agent
@@ -22,12 +24,26 @@ public:
 	glm::vec3 position, direction, color;
 	float speed;
 	static const int modelOffset = 36, numVerts = 2880;
+	float maxSpeed;
 	GLuint shaderProgram;
 
 	Agent(glm::vec3 pos, glm::vec3 dir, GLuint shader);
 
-	void updateVectors(float dt);
+	void updateVectors(float dt, std::vector<Agent>* allAgents);
 	
-	void Draw(Camera* c, float time, float asp);
+	void Draw(Camera* c, float asp);
+
+	std::vector<Agent> getNearbyAgents(std::vector<Agent>* allAgents);
+
+	void calculateDirection(std::vector<Agent> nearby, float dt);
+
+	glm::vec3 getSeperationVector(std::vector<Agent> nearby);
+
+	glm::vec3 getCohesionVector(std::vector<Agent> nearby);
+
+	glm::vec3 getAlignmentVector(std::vector<Agent> nearby);
+
+	glm::vec3 getContainVector(float dt);
+
 };
 #endif // !AGENT_H

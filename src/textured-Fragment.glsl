@@ -16,12 +16,12 @@ uniform int texID;
 const float ambient = .3;
 void main() {
   vec3 color;
-  if (texID == -1)
+  if (texID < 0)
     color = Color;
   else if (texID == 0)
     color = texture(tex0, texcoord).rgb;
   else if (texID == 1)
-    color = texture(tex1, texcoord).rgb;  
+    color = texture(tex1, texcoord).rgb;
   else{
     outColor = vec4(1,0,0,1);
     return; //This was an error, stop lighting!
@@ -35,5 +35,8 @@ void main() {
   if (dot(-lightDir,normal) <= 0.0) spec = 0; //No highlight if we are not facing the light
   vec3 specC = .8*vec3(1.0,1.0,1.0)*pow(spec,4);
   vec3 oColor = ambC+diffuseC+specC;
-  outColor = vec4(oColor,1);
+  if(texID != -2)
+	outColor = vec4(oColor,1);
+  else
+	outColor = vec4(oColor, .4);
 }

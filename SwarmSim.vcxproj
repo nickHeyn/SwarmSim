@@ -28,6 +28,7 @@
   <ItemGroup>
     <ClInclude Include="src\agent.h" />
     <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\constants.h" />
     <ClInclude Include="src\environment.h" />
     <ClInclude Include="src\glad\glad.h" />
     <ClInclude Include="src\glad\khrplatform.h" />

@@ -39,11 +39,14 @@ public:
 
 	glm::vec3 getSeperationVector(std::vector<Agent> nearby);
 
+	// move to average position of neighboring agents
 	glm::vec3 getCohesionVector(std::vector<Agent> nearby);
 
+	// gets the average velocities of neighboring agents
 	glm::vec3 getAlignmentVector(std::vector<Agent> nearby);
 
 	glm::vec3 getContainVector(float dt);
 
+	glm::vec3 getNoise();
 };
 #endif // !AGENT_H

@@ -23,7 +23,7 @@ void Environment::Draw(Camera* cam, float asp, bool debug) {
 	if (debug) {
 		// draw debug cube
 		glm::mat4 model;
-		model = glm::scale(model, glm::vec3(CONTAIN_RADIUS, CONTAIN_RADIUS, CONTAIN_RADIUS));
+		model = glm::scale(model, glm::vec3(CONTAIN_RADIUS*2, CONTAIN_RADIUS*2, CONTAIN_RADIUS*2));
 		GLint uniModel = glGetUniformLocation(shaderProgram, "model");
 		glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -87,5 +87,11 @@ glm::vec3 Environment::randomVelocity() {
 	float z = ((float(rand()) / RAND_MAX) * 2) - 1;
 	float velocity = (float((rand()) / RAND_MAX) * 6) - 3;
 	glm::vec3 result(rand(), rand(), rand());
+	if (velocity < MIN_SPEED && velocity > -MIN_SPEED) {
+		if (velocity < 0)
+			velocity = -MIN_SPEED;
+		else
+			velocity = MIN_SPEED;
+	}
 	return (glm::normalize(result)*velocity);
 }

@@ -7,10 +7,12 @@
 class Camera
 {
 public:
+	// the position and up vector of the camera
 	glm::vec3 pos, up;
 
 	Camera();
 
+	// returns a vector that gives the lookAt point
 	glm::vec3 getLookAt();
 
 };

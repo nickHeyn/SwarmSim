@@ -42,7 +42,7 @@ void Agent::Draw(Camera* cam, float aspectRatio) {
 	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 
 	GLint color = glGetUniformLocation(shaderProgram, "inColor");
-	glm::vec3 colVec(1,0,1);
+	glm::vec3 colVec(1,0,0);
 	glUniform3fv(color, 1, glm::value_ptr(colVec));
 
 	GLint uniTexID = glGetUniformLocation(shaderProgram, "texID");
@@ -62,33 +62,27 @@ void Agent::updateVectors(float dt, std::vector<Agent>* allAgents) {
 
 void Agent::calculateDirection(std::vector<Agent> nearby, float dt) {
 	direction = direction + getContainVector(dt);
-	direction = direction + getCohesionVector(nearby);
-	direction = direction + getAlignmentVector(nearby);
-	direction = direction + getSeperationVector(nearby);
-	direction = direction + getNoise()*0.5f;
-	if (glm::length(direction) > maxSpeed) {
-		direction = glm::normalize(direction) * maxSpeed;
+	direction = direction + getCohesionVector(nearby) * Common::cohesion_weight;
+	direction = direction + getAlignmentVector(nearby) * Common::alignment_weight;
+	direction = direction + getSeparationVector(nearby) * Common::separation_weight;
+	direction = direction + getNoise() * Common::noise_weight;
+
+	// check if speed is within bounds
+	if (glm::length(direction) > MAX_SPEED) {
+		direction = glm::normalize(direction) * MAX_SPEED;
+	}
+	if (glm::length(direction) < MIN_SPEED) {
+		direction = glm::normalize(direction) * MIN_SPEED;
 	}
 }
 
 glm::vec3 Agent::getContainVector(float dt) {
 	float dist = glm::length(position);
-	if (dist + .5 > CONTAIN_RADIUS) {
+	if (dist + .3 > CONTAIN_RADIUS) {
 		glm::vec3 toOrigin = glm::normalize(-position);
 		float diff = fabs(CONTAIN_RADIUS - dist);
 		return toOrigin * (1.0f / diff);
 	}
-	return glm::vec3(0, 0, 0);
-	//float dist = glm::length(position);
-	if (dist > CONTAIN_RADIUS) {
-		// need to redirect back to the origin
-		float diff = dist - CONTAIN_RADIUS;
-		float currentVelocity = glm::length(direction);
-		glm::vec3 result = glm::normalize(-position);
-		result = result * (dt * RETURN_ACCELERATION);
-		return result;
-	}
-	// inside the containment area, return empty vector
 	return glm::vec3(0, 0, 0);
 }
 
@@ -114,14 +108,14 @@ glm::vec3 Agent::getAlignmentVector(std::vector<Agent> nearby) {
 	return sum;
 }
 
-glm::vec3 Agent::getSeperationVector(std::vector<Agent> nearby) {
+glm::vec3 Agent::getSeparationVector(std::vector<Agent> nearby) {
 	glm::vec3 sum(0, 0, 0);
 	for (int i = 0; i < nearby.size(); i++) {
 		float dist = glm::distance(nearby[i].position, position);
 		if (dist < CROWD_RADIUS) {
-			glm::vec3 seperation = glm::normalize(position - nearby[i].position);
-			seperation = seperation * (1.0f / dist);
-			sum = sum + seperation;
+			glm::vec3 separation = glm::normalize(position - nearby[i].position);
+			separation = separation * (1.0f / dist);
+			sum = sum + separation;
 		}
 	}
 	return sum;

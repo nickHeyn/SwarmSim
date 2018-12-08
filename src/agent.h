@@ -14,7 +14,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "camera.h"
-#include "constants.h"
+#include "common.h"
 #include "math.h"
 #include <vector>
 
@@ -37,7 +37,7 @@ public:
 
 	void calculateDirection(std::vector<Agent> nearby, float dt);
 
-	glm::vec3 getSeperationVector(std::vector<Agent> nearby);
+	glm::vec3 getSeparationVector(std::vector<Agent> nearby);
 
 	// move to average position of neighboring agents
 	glm::vec3 getCohesionVector(std::vector<Agent> nearby);

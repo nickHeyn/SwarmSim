@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\agent.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\common.cpp" />
     <ClCompile Include="src\environment.cpp" />
     <ClCompile Include="src\glad\glad.c" />
     <ClCompile Include="src\main.cpp" />
@@ -28,7 +29,7 @@
   <ItemGroup>
     <ClInclude Include="src\agent.h" />
     <ClInclude Include="src\camera.h" />
-    <ClInclude Include="src\constants.h" />
+    <ClInclude Include="src\common.h" />
     <ClInclude Include="src\environment.h" />
     <ClInclude Include="src\glad\glad.h" />
     <ClInclude Include="src\glad\khrplatform.h" />

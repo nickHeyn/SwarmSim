@@ -16,7 +16,7 @@
 #endif
 #include "environment.h"
 #include "camera.h"
-#include "constants.h"
+#include "common.h"
 #include <iostream>
 bool fullscreen = false;
 int screenWidth = 800;
@@ -89,10 +89,12 @@ int main(int argc, char *argv[]) {
 	//Attribute, vals/attrib., type, isNormalized, stride, offset
 	glEnableVertexAttribArray(posAttrib);
 
+	// enters the normals
 	GLint normAttrib = glGetAttribLocation(shaderProgram, "inNormal");
 	glVertexAttribPointer(normAttrib, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(normAttrib);
 
+	// enters the texture coordinates
 	GLint texAttrib = glGetAttribLocation(shaderProgram, "inTexcoord");
 	glEnableVertexAttribArray(texAttrib);
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -109,12 +111,14 @@ int main(int argc, char *argv[]) {
 
 	glDisable(GL_CULL_FACE);
 
-
 	SDL_Event windowEvent;
 	bool quit = false;
-	Camera camera;
-	double time = 0;
+	Camera camera; // initilize the camera
+	double time = 0; // keep track of time 
 	double prevTime = 0;
+	// keeps track of which weight is currently being adjusted
+	float * weightAdjuster = &Common::alignment_weight;
+
 	while (!quit) {
 		time = SDL_GetTicks()/1000.0;
 		float dt = time - prevTime;
@@ -129,12 +133,12 @@ int main(int argc, char *argv[]) {
 				SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_UP) {
-				// move forward
-				//newPos = newPos + camera.dir*dt*player.walkSpeed;
+				// increment the weight for the current adjustMode
+				*weightAdjuster += 0.1f;
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_DOWN) {
-				// move backward
-				//newPos = newPos + (-player.cameraDir)*dt*player.walkSpeed;
+				// decrease the weight for the current adjustMode
+				*weightAdjuster -= 0.1f;
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_RIGHT) {
 				// move right
@@ -147,7 +151,29 @@ int main(int argc, char *argv[]) {
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_SPACE) {
 
 			}
-
+			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_a) {
+				// start adjusting the alignment weight
+				weightAdjuster = &Common::alignment_weight;
+			}
+			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_s) {
+				// start adjusting the separation weight
+				weightAdjuster = &Common::separation_weight;
+			}
+			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_n) {
+				// start adjusting the noise weight
+				weightAdjuster = &Common::noise_weight;
+			}
+			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_c) {
+				// start adjusting the cohesion weight
+				weightAdjuster = &Common::cohesion_weight;
+			}
+			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_d) {
+				// reset all weights to their defaults
+				Common::alignment_weight = DEFAULT_ALIGNMENT;
+				Common::noise_weight = DEFAULT_NOISE;
+				Common::cohesion_weight = DEFAULT_COHESION;
+				Common::separation_weight = DEFAULT_SEPARATION;
+			}
 		}
 		// Clear the screen to default color
 		glClearColor(.2f, 0.4f, 0.8f, 1.0f);

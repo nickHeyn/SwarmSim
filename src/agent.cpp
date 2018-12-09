@@ -61,7 +61,7 @@ void Agent::updateVectors(float dt, std::vector<Agent>* allAgents) {
 }
 
 void Agent::calculateDirection(std::vector<Agent> nearby, float dt) {
-	direction = direction + getContainVector(dt);
+	direction = direction + getContainVector(dt) * 3.0f;
 	direction = direction + getCohesionVector(nearby) * Common::cohesion_weight;
 	direction = direction + getAlignmentVector(nearby) * Common::alignment_weight;
 	direction = direction + getSeparationVector(nearby) * Common::separation_weight;
@@ -78,10 +78,11 @@ void Agent::calculateDirection(std::vector<Agent> nearby, float dt) {
 
 glm::vec3 Agent::getContainVector(float dt) {
 	float dist = glm::length(position);
-	if (dist + .3 > CONTAIN_RADIUS) {
+	if (dist + MOVE_FROM_WALL_DIST > CONTAIN_RADIUS) {
 		glm::vec3 toOrigin = glm::normalize(-position);
 		float diff = fabs(CONTAIN_RADIUS - dist);
 		return toOrigin * (1.0f / diff);
+		printf("%f", dist);
 	}
 	return glm::vec3(0, 0, 0);
 }

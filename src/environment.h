@@ -7,6 +7,7 @@
 #include <vector>
 #include <time.h>
 #include "camera.h"
+#include "common.h"
 #include "agent.h"
 
 class Environment

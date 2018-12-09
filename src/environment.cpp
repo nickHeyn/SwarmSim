@@ -75,9 +75,9 @@ float* Environment::getModelData() {
 }
 
 glm::vec3 Environment::randomPosition() {
-	float x = ((float(rand()) / RAND_MAX) * 10) - 5;
-	float y = ((float(rand()) / RAND_MAX) * 10) - 5;
-	float z = ((float(rand()) / RAND_MAX) * 10) - 5;
+	float x = ((float(rand()) / RAND_MAX) * CONTAIN_RADIUS*2) - CONTAIN_RADIUS;
+	float y = ((float(rand()) / RAND_MAX) * CONTAIN_RADIUS*2) - CONTAIN_RADIUS;
+	float z = ((float(rand()) / RAND_MAX) * CONTAIN_RADIUS*2) - CONTAIN_RADIUS;
 	return glm::vec3(x, y, z);
 }
 
@@ -85,7 +85,7 @@ glm::vec3 Environment::randomVelocity() {
 	float x = ((float(rand()) / RAND_MAX) * 2) - 1;
 	float y = ((float(rand()) / RAND_MAX) * 2) - 1;
 	float z = ((float(rand()) / RAND_MAX) * 2) - 1;
-	float velocity = (float((rand()) / RAND_MAX) * 6) - 3;
+	float velocity = (float((rand()) / RAND_MAX) * MAX_SPEED*2) - MAX_SPEED;
 	glm::vec3 result(rand(), rand(), rand());
 	if (velocity < MIN_SPEED && velocity > -MIN_SPEED) {
 		if (velocity < 0)

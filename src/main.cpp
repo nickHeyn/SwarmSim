@@ -141,12 +141,12 @@ int main(int argc, char *argv[]) {
 				*weightAdjuster -= 0.1f;
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_RIGHT) {
-				// move right
-				//player.updateCamera(dt*player.cameraSpeed);
+				// rotate camera counterclockwise
+				camera.rotateCamera(dt, 1);
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_LEFT) {
-				// move left
-				//player.updateCamera(-dt * player.cameraSpeed);
+				// move camera clockwise
+				camera.rotateCamera(dt, -1);
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_SPACE) {
 

@@ -35,6 +35,7 @@
     <ClInclude Include="src\glad\khrplatform.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="src\textured-Fragment.glsl" />
     <None Include="src\textured-Vertex.glsl" />
   </ItemGroup>

@@ -29,6 +29,12 @@ GLuint InitShader(const char* vShaderFileName, const char* fShaderFileName);
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+// clamps a float to a positive value
+void positiveClamp(float* val) {
+	if (*val < 0.0)
+		*val = 0.0f;
+}
+
 int main(int argc, char *argv[]) {
 	SDL_Init(SDL_INIT_VIDEO);  //Initialize Graphics (for OpenGL)
 
@@ -139,6 +145,7 @@ int main(int argc, char *argv[]) {
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_DOWN) {
 				// decrease the weight for the current adjustMode
 				*weightAdjuster -= 0.1f;
+				
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_RIGHT) {
 				// rotate camera counterclockwise
@@ -174,6 +181,7 @@ int main(int argc, char *argv[]) {
 				Common::cohesion_weight = DEFAULT_COHESION;
 				Common::separation_weight = DEFAULT_SEPARATION;
 			}
+			positiveClamp(weightAdjuster);
 		}
 		// Clear the screen to default color
 		glClearColor(.2f, 0.4f, 0.8f, 1.0f);

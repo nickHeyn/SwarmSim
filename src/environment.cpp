@@ -54,7 +54,7 @@ float* Environment::getModelData() {
 	std::ifstream cubeFile;
 	int currentIndex = 0;
 
-	// First add the cube model
+	// add the cube model
 	cubeFile.open("models/cube.txt");
 	int numLines = 0;
 	cubeFile >> numLines;
@@ -63,13 +63,16 @@ float* Environment::getModelData() {
 	}
 
 	std::ifstream sphereFile;
-	// First add the sphere model
+	// add the sphere model
 	sphereFile.open("models/sphere.txt");
 	numLines = 0; 
 	sphereFile >> numLines;
 	for (int i = 0; i < numLines; i++) {
 		sphereFile >> result[currentIndex++];
 	}
+
+	// add the basic fish model
+	readFishObjFile(currentIndex, result);
 
 	return result;
 }
@@ -94,4 +97,50 @@ glm::vec3 Environment::randomVelocity() {
 			velocity = MIN_SPEED;
 	}
 	return (glm::normalize(result)*velocity);
+}
+
+void Environment::readFishObjFile(int currentIndex, float * result) {
+	// key obj file
+	std::vector< unsigned int > vertexI, normalI;
+	std::vector< glm::vec3 > vertices;
+	std::vector< glm::vec3 > normals;
+
+	FILE* file = fopen("models/fish.obj", "r");
+	while (true) {
+		char header[100];
+		int res = fscanf(file, "%s", header);
+		if (res == EOF)
+			break;
+		if (strcmp(header, "v") == 0) {
+			glm::vec3 vertex;
+			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			vertices.push_back(vertex);
+		}
+		else if (strcmp(header, "vn") == 0) {
+			glm::vec3 normal;
+			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+			normals.push_back(normal);
+		}
+		else if (strcmp(header, "f") == 0) {
+			int vIndex[3], nIndex[3];
+			fscanf(file, "%d//%d %d//%d %d//%d\n", &vIndex[0], &nIndex[0], &vIndex[1], &nIndex[1], &vIndex[2], &nIndex[2]);
+			vertexI.push_back(vIndex[0]);
+			vertexI.push_back(vIndex[1]);
+			vertexI.push_back(vIndex[2]);
+
+			normalI.push_back(nIndex[0]);
+			normalI.push_back(nIndex[1]);
+			normalI.push_back(nIndex[2]);
+		}
+	}
+	for (int i = 0; i < vertexI.size(); i++) {
+		result[currentIndex++] = (vertices[vertexI[i] - 1]).x;
+		result[currentIndex++] = (vertices[vertexI[i] - 1]).y;
+		result[currentIndex++] = (vertices[vertexI[i] - 1]).z;
+		result[currentIndex++] = 0;
+		result[currentIndex++] = 0;
+		result[currentIndex++] = (normals[normalI[i] - 1]).x;
+		result[currentIndex++] = (normals[normalI[i] - 1]).y;
+		result[currentIndex++] = (normals[normalI[i] - 1]).z;
+	}
 }

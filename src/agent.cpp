@@ -26,7 +26,7 @@ std::vector<Agent> Agent::getNearbyAgents(std::vector<Agent>* allAgents) {
 void Agent::Draw(Camera* cam, float aspectRatio) {
 	glm::mat4 model;
 	model = glm::translate(model, position);
-	model = glm::scale(model, glm::vec3(.1, .1, .1));
+	model = glm::scale(model, glm::vec3(.04, .04, .04));
 	GLint uniModel = glGetUniformLocation(shaderProgram, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -61,7 +61,7 @@ void Agent::updateVectors(float dt, std::vector<Agent>* allAgents) {
 }
 
 void Agent::calculateDirection(std::vector<Agent> nearby, float dt) {
-	direction = direction + getContainVector(dt) * 3.0f;
+	direction = direction + getContainVector(dt);
 	direction = direction + getCohesionVector(nearby) * Common::cohesion_weight;
 	direction = direction + getAlignmentVector(nearby) * Common::alignment_weight;
 	direction = direction + getSeparationVector(nearby) * Common::separation_weight;
@@ -82,7 +82,6 @@ glm::vec3 Agent::getContainVector(float dt) {
 		glm::vec3 toOrigin = glm::normalize(-position);
 		float diff = fabs(CONTAIN_RADIUS - dist);
 		return toOrigin * (1.0f / diff);
-		printf("%f", dist);
 	}
 	return glm::vec3(0, 0, 0);
 }

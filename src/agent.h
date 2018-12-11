@@ -23,7 +23,7 @@ class Agent
 public:
 	glm::vec3 position, direction, color;
 	float speed;
-	static const int modelOffset = 36, numVerts = 2880;
+	static const int modelOffset = 2916, numVerts = 348;
 	float maxSpeed;
 	GLuint shaderProgram;
 

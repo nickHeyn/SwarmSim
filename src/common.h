@@ -3,13 +3,13 @@
 #define COMMON_H
 
 #define RETURN_ACCELERATION 1.0f
-#define NUM_AGENTS 200
+#define NUM_AGENTS 150
 #define CONTAIN_RADIUS 5.5f
 #define NEARBY_RADIUS .5f
 #define DEBUG_ON 1
 #define MOVE_FROM_WALL_DIST .5f
 #define CROWD_RADIUS .3f 
-#define MIN_SPEED 2.0f
+#define MIN_SPEED 3.0f
 #define MAX_SPEED 3.5f
 #define DEFAULT_COHESION 1.0f
 #define DEFAULT_ALIGNMENT 1.0f

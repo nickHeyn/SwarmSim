@@ -14,7 +14,7 @@ class Environment
 {
 public:
 	std::vector<Agent> agents;
-	const static int NUM_MODEL_VERTS = 2916;
+	const static int NUM_MODEL_VERTS = 3264;
 	GLuint shaderProgram;
 
 	Environment(int numAgents, GLuint shaderProgram);
@@ -29,6 +29,8 @@ private:
 	glm::vec3 randomPosition();
 
 	glm::vec3 randomVelocity();
+
+	void readFishObjFile(int index, float * resultArray);
 
 };
 #endif // !ENVIRONMENT_H

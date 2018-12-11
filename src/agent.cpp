@@ -24,8 +24,18 @@ std::vector<Agent> Agent::getNearbyAgents(std::vector<Agent>* allAgents) {
 }
 
 void Agent::Draw(Camera* cam, float aspectRatio) {
+	glm::vec3 normalDirection = glm::normalize(direction);
+	float theta_x = atan(normalDirection.y / normalDirection.z);
+	float theta_y = atan(normalDirection.z / normalDirection.x);
+	if (normalDirection.z < 0) {
+		theta_x += 3.4159;
+	}
+	if (normalDirection.x < 0)
+		theta_y += 3.14159;
 	glm::mat4 model;
 	model = glm::translate(model, position);
+	model = glm::rotate(model, theta_y, glm::vec3(0, 1, 0));
+	model = glm::rotate(model, theta_x, glm::vec3(1, 0, 0));
 	model = glm::scale(model, glm::vec3(.04, .04, .04));
 	GLint uniModel = glGetUniformLocation(shaderProgram, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));

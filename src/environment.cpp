@@ -2,10 +2,10 @@
 
 Environment::Environment(int numAgents, GLuint shader) {
 	srand(time(NULL));
-	for (int i = 0; i < numAgents; i++) {
-		agents.push_back(Agent(randomPosition(), randomVelocity(), shader));
-	}
 	shaderProgram = shader;
+	for (int i = 0; i < numAgents; i++) {
+		addAgent();
+	}
 }
 
 void Environment::updateAgents(float time) {
@@ -143,4 +143,8 @@ void Environment::readFishObjFile(int currentIndex, float * result) {
 		result[currentIndex++] = (normals[normalI[i] - 1]).y;
 		result[currentIndex++] = (normals[normalI[i] - 1]).z;
 	}
+}
+
+void Environment::addAgent() {
+	agents.push_back(Agent(randomPosition(), randomVelocity(), shaderProgram));
 }

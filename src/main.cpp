@@ -156,7 +156,8 @@ int main(int argc, char *argv[]) {
 				camera.rotateCamera(dt, -1);
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_SPACE) {
-
+				// add an agent to the simulation
+				env.addAgent();
 			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_a) {
 				// start adjusting the alignment weight

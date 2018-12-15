@@ -25,6 +25,8 @@ public:
 
 	void updateAgents(float time);
 
+	void addAgent();
+
 private:
 	glm::vec3 randomPosition();
 

@@ -34,8 +34,7 @@ void Agent::Draw(Camera* cam, float aspectRatio) {
 		theta_y += 3.14159;
 	glm::mat4 model;
 	model = glm::translate(model, position);
-	model = glm::rotate(model, theta_y, glm::vec3(0, 1, 0));
-	model = glm::rotate(model, theta_x, glm::vec3(1, 0, 0));
+	model = model * getRotateMatrix();
 	model = glm::scale(model, glm::vec3(.04, .04, .04));
 	GLint uniModel = glGetUniformLocation(shaderProgram, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -137,4 +136,19 @@ glm::vec3 Agent::getNoise() {
 	float z = ((float(rand()) / RAND_MAX) * 2) - 1;
 	glm::vec3 result(rand(), rand(), rand());
 	return (glm::normalize(result));
+}
+
+glm::mat4 Agent::getRotateMatrix() {
+	/*
+	Note: The following code was used from http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-17-quaternions/#foreword-rotation-vs-orientation
+	*/
+	glm::vec3 start(0, 0, -1);
+	glm::vec3 dest = glm::normalize(direction);
+	float cosTheta = glm::dot(start, dest);
+	glm::vec3 rotationAxis;
+	rotationAxis = glm::cross(start, dest);
+	float s = std::sqrt((1 + cosTheta) * 2);
+	float inverse = 1 / s;
+	glm::quat rotationQuat(s*.5f, rotationAxis.x*inverse, rotationAxis.y*inverse, rotationAxis.z * inverse);
+	return glm::toMat4(rotationQuat);
 }

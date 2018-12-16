@@ -13,6 +13,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "camera.h"
 #include "common.h"
 #include "math.h"
@@ -48,5 +50,8 @@ public:
 	glm::vec3 getContainVector(float dt);
 
 	glm::vec3 getNoise();
+
+private:
+	glm::mat4 getRotateMatrix();
 };
 #endif // !AGENT_H

@@ -71,15 +71,6 @@ float* Environment::getModelData() {
 		cubeFile >> result[currentIndex++];
 	}
 
-	std::ifstream sphereFile;
-	// add the sphere model
-	sphereFile.open("models/sphere.txt");
-	numLines = 0; 
-	sphereFile >> numLines;
-	for (int i = 0; i < numLines; i++) {
-		sphereFile >> result[currentIndex++];
-	}
-
 	// add the basic fish model
 	readFishObjFile(currentIndex, result);
 

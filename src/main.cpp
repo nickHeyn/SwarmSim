@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
 	double time = 0; // keep track of time 
 	double prevTime = 0;
 	// keeps track of which weight is currently being adjusted
-	float * weightAdjuster = &Common::alignment_weight;
+	float * weightAdjuster = &Common::noise_weight;
 
 	while (!quit) {
 		time = SDL_GetTicks()/1000.0;

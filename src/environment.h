@@ -15,7 +15,7 @@ class Environment
 {
 public:
 	std::vector<Agent> agents;
-	const static int NUM_MODEL_VERTS = 3264;
+	const static int NUM_MODEL_VERTS = 384;
 	GLuint shaderProgram;
 	Predator* predatorAgent;
 

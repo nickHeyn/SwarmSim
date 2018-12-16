@@ -22,7 +22,7 @@ class Predator
 {
 public:
 	glm::vec3 position, direction;
-	static const int modelOffset = 2916, numVerts = 348;
+	static const int modelOffset = 36, numVerts = 348;
 	GLuint shaderProgram;
 
 	Predator(GLuint shader);

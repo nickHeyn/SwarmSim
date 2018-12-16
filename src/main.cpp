@@ -175,12 +175,21 @@ int main(int argc, char *argv[]) {
 				// start adjusting the cohesion weight
 				weightAdjuster = &Common::cohesion_weight;
 			}
+			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_p) {
+				// send out a predator agent
+				env.releasePredatorAgent();
+			}
+			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_v) {
+				// send out a predator agent
+				weightAdjuster = &Common::avoid_weight;
+			}
 			if (windowEvent.type == SDL_KEYDOWN && windowEvent.key.keysym.sym == SDLK_d) {
 				// reset all weights to their defaults
 				Common::alignment_weight = DEFAULT_ALIGNMENT;
 				Common::noise_weight = DEFAULT_NOISE;
 				Common::cohesion_weight = DEFAULT_COHESION;
 				Common::separation_weight = DEFAULT_SEPARATION;
+				Common::avoid_weight = DEFAULT_AVOID;
 			}
 			positiveClamp(weightAdjuster);
 		}

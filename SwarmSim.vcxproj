@@ -25,6 +25,7 @@
     <ClCompile Include="src\environment.cpp" />
     <ClCompile Include="src\glad\glad.c" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\predator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\agent.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="src\environment.h" />
     <ClInclude Include="src\glad\glad.h" />
     <ClInclude Include="src\glad\khrplatform.h" />
+    <ClInclude Include="src\predator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

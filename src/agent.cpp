@@ -35,7 +35,7 @@ void Agent::Draw(Camera* cam, float aspectRatio) {
 	glm::mat4 model;
 	model = glm::translate(model, position);
 	model = model * getRotateMatrix();
-	model = glm::scale(model, glm::vec3(.04, .04, .04));
+	model = glm::scale(model, glm::vec3(AGENT_SCALE, AGENT_SCALE, AGENT_SCALE));
 	GLint uniModel = glGetUniformLocation(shaderProgram, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -60,21 +60,25 @@ void Agent::Draw(Camera* cam, float aspectRatio) {
 	glDrawArrays(GL_TRIANGLES, modelOffset, numVerts); //Number of vertices
 }
 
-void Agent::updateVectors(float dt, std::vector<Agent>* allAgents) {
-	// first calculate nearby agents, then calculate the new direction vector
-	calculateDirection(getNearbyAgents(allAgents), dt);
+void Agent::updateVectors(float dt, std::vector<Agent>* allAgents, Predator * predatorAgent) {
+	// calculate nearby agents, then calculate the new direction vector
+	calculateDirection(getNearbyAgents(allAgents), dt, predatorAgent);
 
 
-	// finally, update the agent's position
+	// update the agent's position
 	position = position + direction*dt;
 }
 
-void Agent::calculateDirection(std::vector<Agent> nearby, float dt) {
+void Agent::calculateDirection(std::vector<Agent> nearby, float dt, Predator * predatorAgent) {
 	direction = direction + getContainVector(dt);
 	direction = direction + getCohesionVector(nearby) * Common::cohesion_weight;
 	direction = direction + getAlignmentVector(nearby) * Common::alignment_weight;
 	direction = direction + getSeparationVector(nearby) * Common::separation_weight;
 	direction = direction + getNoise() * Common::noise_weight;
+	if (predatorAgent != NULL) {
+		// only calculate if the predator agent is active
+		direction = direction + getAvoid(predatorAgent);
+	}
 
 	// check if speed is within bounds
 	if (glm::length(direction) > MAX_SPEED) {
@@ -151,4 +155,15 @@ glm::mat4 Agent::getRotateMatrix() {
 	float inverse = 1 / s;
 	glm::quat rotationQuat(s*.5f, rotationAxis.x*inverse, rotationAxis.y*inverse, rotationAxis.z * inverse);
 	return glm::toMat4(rotationQuat);
+}
+
+glm::vec3 Agent::getAvoid(Predator * predator) {
+	float dist = glm::distance(predator->position, position);
+	if (dist < PREDATOR_AWARENESS_RADIUS) {
+		glm::vec3 avoidVector = glm::normalize(position - predator->position);
+		return avoidVector * Common::avoid_weight;
+	}
+	else {
+		return glm::vec3(0, 0, 0);
+	}
 }

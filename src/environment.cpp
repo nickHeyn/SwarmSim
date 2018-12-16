@@ -10,7 +10,13 @@ Environment::Environment(int numAgents, GLuint shader) {
 
 void Environment::updateAgents(float time) {
 	for (int i = 0; i < agents.size(); i++) {
-		agents[i].updateVectors(time, &agents);
+		agents[i].updateVectors(time, &agents, predatorAgent);
+	}
+	if (predatorAgent != NULL) {
+		if (predatorAgent->move(time)) {
+			delete(predatorAgent);
+			predatorAgent = NULL;
+		}
 	}
 }
 
@@ -19,7 +25,10 @@ void Environment::Draw(Camera* cam, float asp, bool debug) {
 	for (int i = 0; i < agents.size(); i++) {
 		agents[i].Draw(cam, asp);
 	}
-
+	if (predatorAgent != NULL) {
+		// draw the predator agent if its released
+		predatorAgent->Draw(cam, asp);
+	}
 	if (debug) {
 		// draw debug cube
 		glm::mat4 model;
@@ -147,4 +156,10 @@ void Environment::readFishObjFile(int currentIndex, float * result) {
 
 void Environment::addAgent() {
 	agents.push_back(Agent(randomPosition(), randomVelocity(), shaderProgram));
+}
+
+void Environment::releasePredatorAgent() {
+	if (predatorAgent == NULL) {
+		predatorAgent = new Predator(shaderProgram);
+	}
 }

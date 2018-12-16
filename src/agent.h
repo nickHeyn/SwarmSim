@@ -17,13 +17,14 @@
 #include "glm/gtx/quaternion.hpp"
 #include "camera.h"
 #include "common.h"
+#include "predator.h"
 #include "math.h"
 #include <vector>
 
 class Agent
 {
 public:
-	glm::vec3 position, direction, color;
+	glm::vec3 position, direction;
 	float speed;
 	static const int modelOffset = 2916, numVerts = 348;
 	float maxSpeed;
@@ -31,14 +32,19 @@ public:
 
 	Agent(glm::vec3 pos, glm::vec3 dir, GLuint shader);
 
-	void updateVectors(float dt, std::vector<Agent>* allAgents);
+	// updates the position and direction vectors
+	void updateVectors(float dt, std::vector<Agent>* allAgents, Predator* p);
 	
+	// draws the agent
 	void Draw(Camera* c, float asp);
 
+	// gets all the agents nearby and puts them in the returned list
 	std::vector<Agent> getNearbyAgents(std::vector<Agent>* allAgents);
 
-	void calculateDirection(std::vector<Agent> nearby, float dt);
+	// sums all the vectors to get a single direction vector
+	void calculateDirection(std::vector<Agent> nearby, float dt, Predator* p);
 
+	// keeps agents from colliding 
 	glm::vec3 getSeparationVector(std::vector<Agent> nearby);
 
 	// move to average position of neighboring agents
@@ -47,9 +53,14 @@ public:
 	// gets the average velocities of neighboring agents
 	glm::vec3 getAlignmentVector(std::vector<Agent> nearby);
 
+	// gets the vector that contains the agents in the "tank"
 	glm::vec3 getContainVector(float dt);
 
+	// random noise
 	glm::vec3 getNoise();
+
+	// makes the agents avoid the predator agent
+	glm::vec3 getAvoid(Predator * p);
 
 private:
 	glm::mat4 getRotateMatrix();

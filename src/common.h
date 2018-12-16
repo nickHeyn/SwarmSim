@@ -13,7 +13,7 @@
 #define MAX_SPEED 3.5f
 #define DEFAULT_COHESION 1.0f
 #define DEFAULT_ALIGNMENT 1.0f
-#define DEFAULT_NOISE 0.5f
+#define DEFAULT_NOISE 0.2f
 #define DEFAULT_SEPARATION 1.0f
 
 

@@ -3,7 +3,8 @@
 in vec3 Color;
 in vec3 vertNormal;
 in vec3 pos;
-in vec3 lightDir;
+in vec3 lightDir1;
+in vec3 lightDir2;
 in vec2 texcoord;
 
 out vec4 outColor;
@@ -27,16 +28,10 @@ void main() {
     return; //This was an error, stop lighting!
   }
   vec3 normal = normalize(vertNormal);
-  vec3 diffuseC = color*max(dot(-lightDir,normal),0.0);
+  vec3 diffuseC = color*max(dot(-lightDir1,normal),0.0);
+  diffuseC = diffuseC + color*max(dot(-lightDir2,normal),0.0);
   vec3 ambC = color*ambient;
-  //vec3 viewDir = normalize(-pos); //We know the eye is at (0,0)! (Do you know why?)
-  //vec3 reflectDir = reflect(viewDir,normal);
-  //float spec = max(dot(reflectDir,lightDir),0.0);
-  float spec = 0;
-  //if (dot(-lightDir,normal) <= 0.0) spec = 0; //No highlight if we are not facing the light
-  //vec3 specC = .8*vec3(1.0,1.0,1.0)*pow(spec,4);
-  vec3 specC = vec3(0,0,0);
-  vec3 oColor = ambC+diffuseC+specC;
+  vec3 oColor = ambC+diffuseC;
   if(texID != -2)
 	outColor = vec4(oColor,1);
   else
